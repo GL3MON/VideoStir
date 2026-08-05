@@ -37,3 +37,5 @@ def compute_similarities(query: str, documents: List[str]) -> List[float]:
     similarities = query_embedding @ document_embeddings.T
     return similarities.squeeze(0).tolist()
 
+
+__all__ = ["compute_similarities", "_embed_model"]

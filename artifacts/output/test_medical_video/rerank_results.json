@@ -1,0 +1,67 @@
+[
+  {
+    "temp_path": "/tmp/frames_tmp_d5g4g9me/seg0010_frame_00010.jpg",
+    "segment_index": 10,
+    "segment_path": "/hfcache/harissh/VideoStir/artifacts/test_medical_video.mp4",
+    "frame_in_segment": 10,
+    "global_frame_index": 1990,
+    "timestamp": 79.6,
+    "score": 4.511683464050293,
+    "is_subtitle_frame": true,
+    "rank": 1,
+    "output_path": "/hfcache/harissh/VideoStir/artifacts/output/test_medical_video/t00h01m19s_600ms_seg0010_frame00010.jpg",
+    "timestamp_label": "00h01m19s_600ms"
+  },
+  {
+    "temp_path": "/tmp/frames_tmp_d5g4g9me/seg0010_frame_00035.jpg",
+    "segment_index": 10,
+    "segment_path": "/hfcache/harissh/VideoStir/artifacts/test_medical_video.mp4",
+    "frame_in_segment": 35,
+    "global_frame_index": 2015,
+    "timestamp": 80.6,
+    "score": 4.474218368530273,
+    "is_subtitle_frame": true,
+    "rank": 2,
+    "output_path": "/hfcache/harissh/VideoStir/artifacts/output/test_medical_video/t00h01m20s_600ms_seg0010_frame00035.jpg",
+    "timestamp_label": "00h01m20s_600ms"
+  },
+  {
+    "temp_path": "/tmp/frames_tmp_d5g4g9me/seg0010_frame_00040.jpg",
+    "segment_index": 10,
+    "segment_path": "/hfcache/harissh/VideoStir/artifacts/test_medical_video.mp4",
+    "frame_in_segment": 40,
+    "global_frame_index": 2020,
+    "timestamp": 80.8,
+    "score": 4.512664318084717,
+    "is_subtitle_frame": true,
+    "rank": 3,
+    "output_path": "/hfcache/harissh/VideoStir/artifacts/output/test_medical_video/t00h01m20s_800ms_seg0010_frame00040.jpg",
+    "timestamp_label": "00h01m20s_800ms"
+  },
+  {
+    "temp_path": "/tmp/frames_tmp_d5g4g9me/seg0010_frame_00055.jpg",
+    "segment_index": 10,
+    "segment_path": "/hfcache/harissh/VideoStir/artifacts/test_medical_video.mp4",
+    "frame_in_segment": 55,
+    "global_frame_index": 2035,
+    "timestamp": 81.4,
+    "score": 4.487070083618164,
+    "is_subtitle_frame": true,
+    "rank": 4,
+    "output_path": "/hfcache/harissh/VideoStir/artifacts/output/test_medical_video/t00h01m21s_400ms_seg0010_frame00055.jpg",
+    "timestamp_label": "00h01m21s_400ms"
+  },
+  {
+    "temp_path": "/tmp/frames_tmp_d5g4g9me/seg0010_frame_00075.jpg",
+    "segment_index": 10,
+    "segment_path": "/hfcache/harissh/VideoStir/artifacts/test_medical_video.mp4",
+    "frame_in_segment": 75,
+    "global_frame_index": 2055,
+    "timestamp": 82.2,
+    "score": 4.476164817810059,
+    "is_subtitle_frame": true,
+    "rank": 5,
+    "output_path": "/hfcache/harissh/VideoStir/artifacts/output/test_medical_video/t00h01m22s_200ms_seg0010_frame00075.jpg",
+    "timestamp_label": "00h01m22s_200ms"
+  }
+]

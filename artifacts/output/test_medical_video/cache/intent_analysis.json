@@ -1,0 +1,1 @@
+{"subtitle_search": true, "time_search": false, "reason": "The query mentions a specific term ('pulse rate') that is likely to be found in subtitles.", "raw_response": "```json\n{\n  \"subtitle_search\": true,\n  \"time_search\": false,\n  \"reason\": \"The query mentions a specific term ('pulse rate') that is likely to be found in subtitles.\"\n}\n```"}
