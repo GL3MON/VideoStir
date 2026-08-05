@@ -98,8 +98,8 @@ tmp_*/
 # *.mkv
 
 # Model weights (huge files)
-models/
-models/*/
+# models/
+# models/*/
 Qwen/
 result/
 

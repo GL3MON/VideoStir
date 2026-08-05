@@ -1,11 +1,11 @@
 {
-  "num_reranked_frames": 5,
+  "num_reranked_frames": 128,
   "num_time_focus_frames": 0,
   "intent": {
-    "subtitle_search": true,
+    "subtitle_search": false,
     "time_search": false,
-    "reason": "The query mentions a specific term ('pulse rate') that is likely to be found in subtitles.",
-    "raw_response": "```json\n{\n  \"subtitle_search\": true,\n  \"time_search\": false,\n  \"reason\": \"The query mentions a specific term ('pulse rate') that is likely to be found in subtitles.\"\n}\n```"
+    "reason": "The query mentions a specific context related to medical procedures, which may imply the need to search for subtitles that contain relevant information.",
+    "raw_response": "```json\n{\n  \"subtitle_search\": true,\n  \"time_search\": false,\n  \"reason\": \"The query mentions a specific context related to medical procedures, which may imply the need to search for subtitles that contain relevant information.\"\n}\n```"
   },
-  "saved_at": "2026-08-05T18:59:47.204357"
+  "saved_at": "2026-08-05T19:32:21.947268"
 }

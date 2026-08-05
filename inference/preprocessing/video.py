@@ -183,7 +183,7 @@ def cluster_and_segment(
         labels = clusterer.fit_predict(embeddings)
     elif method == "pelt":
         from sklearn.metrics.pairwise import cosine_similarity
-        from . import ruptures as rpt
+        import ruptures as rpt
 
         if len(embeddings) != len(frames):
             raise ValueError("The lengths of the embeddings and the frames do not match.")
@@ -350,7 +350,7 @@ class VideoSegmenter:
             print(f"[VideoSegmenter] Clustering {len(embeddings)} embeddings into {self.n_clusters} segments...")
         change_points, _ = cluster_and_segment(
             video_path, embeddings, frames,
-            method="kmeans", n_clusters=self.n_clusters
+            method="pelt"
         )
         if self.verbose:
             print(f"[VideoSegmenter] Exporting {len(change_points) - 1} segments...")
