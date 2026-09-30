@@ -424,7 +424,8 @@ def run_pipeline(config: PipelineConfig) -> PipelineResult:
                         segment_infos,
                         frame_interval=config.embedding_frame_interval,
                         compile_model=config.compile_model,
-                        num_workers=config.num_gpus
+                        num_workers=config.num_gpus,
+                        model_name=config.embedding_model_name,
                     )
 
                 if checkpoint_manager is not None and config.checkpoint_embeddings:

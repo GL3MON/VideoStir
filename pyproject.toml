@@ -43,6 +43,9 @@ inference = [
     "bitsandbytes>=0.43",
     "datasets>=2.19",
 ]
+qwen35 = [
+    "transformers @ git+https://github.com/huggingface/transformers.git",
+]
 train = [
     "trl>=0.11",
     "deepspeed>=0.15",
@@ -61,6 +64,7 @@ gdrive = [
     "google-api-python-client>=2.0",
     "google-auth>=2.0",
     "google-auth-oauthlib>=1.0",
+    "gdown>=6.0",
 ]
 dev = [
     "pytest>=8.0",

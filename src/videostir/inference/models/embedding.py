@@ -307,6 +307,7 @@ def compute_video_features(
     chunk_size: int = 16,
     compile_model: bool = False,
     num_workers: int = 8,  # Number of parallel workers (GPUs)
+    model_name: str = "PE-Core-G14-448",
 ) -> List[Dict[str, Any]]:
     """Convenience function to compute video features.
 
@@ -316,13 +317,14 @@ def compute_video_features(
         chunk_size: Chunk size for VRAM efficiency.
         compile_model: If True, use torch.compile to accelerate the model.
         num_workers: Number of parallel workers (recommend 1 per GPU).
+        model_name: Pretrained CLIP model name for visual embeddings.
 
     Returns:
         List of segment dictionaries with image features.
     """
     # If only 1 worker, use sequential processing
     if num_workers <= 1:
-        with VideoEmbedder(compile_model=compile_model) as embedder:
+        with VideoEmbedder(model_name=model_name, compile_model=compile_model) as embedder:
             return embedder.compute_video_features(
                 segment_infos=segment_infos,
                 frame_interval=frame_interval,
@@ -330,8 +332,6 @@ def compute_video_features(
             )
 
     # Parallel processing
-    model_name = "PE-Core-G14-448"
-
     # Distribute segments across workers (round-robin by GPU index)
     worker_segments = [[] for _ in range(num_workers)]
     for i, seg in enumerate(segment_infos):

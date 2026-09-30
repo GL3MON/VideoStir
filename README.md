@@ -108,6 +108,21 @@ The uploader scans recursively, keeps the folder structure, and replaces a
 same-name file in its destination folder when you rerun it. Remove `--dry-run`
 only after confirming the listed source videos are the ones you want to upload.
 
+### Download the Public Drive Folder
+
+After sharing the Drive folder as **Anyone with the link — Viewer**, download it
+without Google credentials. This uses `gdown` 6 or newer, which handles folders
+with more than 50 files, and resumes partial files when rerun:
+
+```bash
+python scripts/download_videos_from_gdrive.py \
+    "https://drive.google.com/drive/folders/<folder-id>" \
+    --output videos
+```
+
+You can also pass just the folder ID. The default output directory is
+`videos_from_gdrive/`.
+
 ### Basic Usage
 
 ```python
@@ -227,7 +242,14 @@ python -m videostir.inference run \
     --query "What happens?" \
     --output results/ \
     --top-frames 64 \
-    --frame-interval 20
+    --frame-interval 20 \
+    --intent-model-id Qwen/Qwen3.5-0.8B \
+    --reranker-model-id Qwen/Qwen2.5-VL-3B-Instruct \
+    --embedding-model-name PE-Core-G14-448 \
+    --reranker-adapter-dir result
+
+# Install the latest Transformers implementation to use Qwen3.5
+pip install -e ".[qwen35]"
 
 # Batch mode
 python -m videostir.inference batch \

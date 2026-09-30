@@ -87,6 +87,7 @@ class PipelineConfig:
     # Model settings
     intent_model_id: str = "Qwen/Qwen2.5-VL-7B-Instruct"
     reranker_model_id: str = "Qwen/Qwen2.5-VL-3B-Instruct"
+    embedding_model_name: str = "PE-Core-G14-448"
     reranker_adapter_dir: str = "./result"
     reranker_compile_model: bool = False  # Use torch.compile for faster inference
 
@@ -128,6 +129,10 @@ class PipelineConfig:
             "time_range_padding": self.time_range_padding,
             "time_min_window": self.time_min_window,
             "short_video_threshold": self.short_video_threshold,
+            "intent_model_id": self.intent_model_id,
+            "reranker_model_id": self.reranker_model_id,
+            "embedding_model_name": self.embedding_model_name,
+            "reranker_adapter_dir": self.reranker_adapter_dir,
             "correct_choice": self.correct_choice,
         }
 

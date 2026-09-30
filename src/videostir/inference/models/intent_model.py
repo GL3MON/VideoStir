@@ -14,9 +14,14 @@ from typing import Any, Dict, List, Optional
 import torch
 from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
 
+try:
+    from transformers import AutoModelForMultimodalLM
+except ImportError:  # Transformers 4.x does not include the Qwen3.5 auto class.
+    AutoModelForMultimodalLM = None
+
 
 # Default model for intent analysis
-DEFAULT_MODEL_ID = "Qwen/Qwen2.5-VL-7B-Instruct"
+DEFAULT_MODEL_ID = "Qwen/Qwen2.5-VL-3B-Instruct"
 
 # Prompts for intent analysis
 INTENT_PROMPT = (
@@ -103,11 +108,27 @@ class IntentAnalyzer:
         """Load the model and processor if not already loaded."""
         if self._processor is None or self._model is None:
             self._processor = AutoProcessor.from_pretrained(self.model_id)
-            self._model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
-                self.model_id,
-                torch_dtype=self._resolve_dtype(),
-                device_map="auto" if self.device == "cuda" else self.device,
-            )
+            if self.model_id.startswith("Qwen/Qwen3.5-"):
+                if AutoModelForMultimodalLM is None:
+                    raise ImportError(
+                        "Qwen3.5 requires the latest Transformers from GitHub. Install it with "
+                        '`pip install "transformers @ '
+                        'git+https://github.com/huggingface/transformers.git"`.'
+                    )
+                model_class = AutoModelForMultimodalLM
+                # Keep room for prompt tensors and generation state on shared GPUs.
+                model_memory = {0: "3GiB", "cpu": "48GiB"} if self.device == "cuda" else None
+            else:
+                model_class = Qwen2_5_VLForConditionalGeneration
+                model_memory = None
+
+            load_kwargs = {
+                "torch_dtype": self._resolve_dtype(),
+                "device_map": "auto" if self.device == "cuda" else self.device,
+            }
+            if model_memory is not None:
+                load_kwargs["max_memory"] = model_memory
+            self._model = model_class.from_pretrained(self.model_id, **load_kwargs)
             self._model.eval()
 
     def _resolve_dtype(self) -> torch.dtype:

@@ -65,6 +65,10 @@ Examples:
     run_parser.add_argument("--enable-embed-compile", action="store_true", dest="enable_embed_compile", help="Enable torch.compile for vision model during video feature computation")
     run_parser.add_argument("--checkpoint-dir", type=str, default="checkpoints", dest="checkpoint_dir")
     run_parser.add_argument("--cache-dir", type=str, default="cache", dest="cache_dir")
+    run_parser.add_argument("--intent-model-id", default=PipelineConfig.__dataclass_fields__["intent_model_id"].default)
+    run_parser.add_argument("--reranker-model-id", default=PipelineConfig.__dataclass_fields__["reranker_model_id"].default)
+    run_parser.add_argument("--embedding-model-name", default=PipelineConfig.__dataclass_fields__["embedding_model_name"].default)
+    run_parser.add_argument("--reranker-adapter-dir", default=PipelineConfig.__dataclass_fields__["reranker_adapter_dir"].default)
 
     # Batch parser
     batch_parser = subparsers.add_parser("batch", help="Run batch processing")
@@ -74,13 +78,20 @@ Examples:
     batch_parser.add_argument("--subtitle-root", type=str, default=None, dest="subtitle_root")
     batch_parser.add_argument("--skip-existing", action="store_true", default=True, dest="skip_existing")
     batch_parser.add_argument("--force", action="store_false", dest="skip_existing")
+    batch_parser.add_argument("--intent-model-id", default=PipelineConfig.__dataclass_fields__["intent_model_id"].default)
+    batch_parser.add_argument("--reranker-model-id", default=PipelineConfig.__dataclass_fields__["reranker_model_id"].default)
+    batch_parser.add_argument("--embedding-model-name", default=PipelineConfig.__dataclass_fields__["embedding_model_name"].default)
+    batch_parser.add_argument("--reranker-adapter-dir", default=PipelineConfig.__dataclass_fields__["reranker_adapter_dir"].default)
 
     # Answer parser
     answer_parser = subparsers.add_parser("answer", help="Run pipeline and generate answer with Qwen2.5-VL-3B")
     answer_parser.add_argument("--video", required=True, help="Path to input video")
     answer_parser.add_argument("--output", default="./output/", help="Output directory")
     answer_parser.add_argument("--top-frames", type=int, default=5, help="Number of frames for answer generation")
-    answer_parser.add_argument("--model-id", default="Qwen/Qwen2.5-VL-3B-Instruct", help="MLLM model ID")
+    answer_parser.add_argument(
+        "--model-id", "--answer-model-id", dest="model_id",
+        default="Qwen/Qwen2.5-VL-3B-Instruct", help="MLLM model ID",
+    )
     answer_parser.add_argument("--device", default="cuda", help="Device to run on (cuda/cpu)")
     answer_parser.add_argument("--frame-interval", type=int, default=30, help="Frame sampling interval")
     answer_parser.add_argument("--subtitle-json", type=str, default=None, dest="subtitle_json", help="Path to subtitle JSON file")
@@ -124,6 +135,10 @@ Examples:
             cache_dir=args.cache_dir,
             compile_model=args.enable_segment_compile or args.enable_embed_compile,
             batch_size=args.batch_size,
+            intent_model_id=args.intent_model_id,
+            reranker_model_id=args.reranker_model_id,
+            embedding_model_name=args.embedding_model_name,
+            reranker_adapter_dir=args.reranker_adapter_dir,
         )
 
         # Run pipeline
@@ -144,6 +159,10 @@ Examples:
             video_root=args.video_root,
             subtitle_root=args.subtitle_root,
             skip_existing=args.skip_existing,
+            intent_model_id=args.intent_model_id,
+            reranker_model_id=args.reranker_model_id,
+            embedding_model_name=args.embedding_model_name,
+            reranker_adapter_dir=args.reranker_adapter_dir,
         )
 
         total = len(results)
