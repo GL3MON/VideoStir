@@ -124,7 +124,6 @@ src/*.egg-info/
 /batch_results/
 
 # Local datasets, videos, and session transcripts
-/MedVidQA/
 /videos/
 /session-ses_*.md
 
