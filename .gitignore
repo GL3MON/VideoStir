@@ -106,3 +106,31 @@ result/
 # Cache directories
 # cache/
 # .checkpoints/
+
+# VideoStir runtime outputs
+eval_results/
+eval_reports/
+medvidqa_retrieval/
+pipeline_output/
+batch_output/
+my_results/
+artifacts/output/
+*.egg-info/
+src/*.egg-info/
+/output/
+/results/
+/checkpoints/
+/cache/
+/batch_results/
+
+# Local datasets, videos, and session transcripts
+/MedVidQA/
+/videos/
+/session-ses_*.md
+
+# Google Drive credentials
+/.secrets/
+*service-account*.json
+*gdrive*credentials*.json
+token.json
+.gdrive/

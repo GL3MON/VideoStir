@@ -15,7 +15,7 @@ This guide covers common VideoStir workflows with step-by-step examples.
 ### Basic Example
 
 ```python
-from videostir import simple_rag
+from videostir.inference import simple_rag
 
 # Run retrieval
 frames = simple_rag(
@@ -31,7 +31,7 @@ for frame in frames[:10]:
 ### With Custom Output Directory
 
 ```python
-from videostir import simple_rag
+from videostir.inference import simple_rag
 
 frames = simple_rag(
     video_path="my_video.mp4",
@@ -48,7 +48,7 @@ frames = simple_rag(
 VideoStir automatically detects time-focused queries:
 
 ```python
-from videostir import simple_rag
+from videostir.inference import simple_rag
 
 # Queries about beginning/end will trigger time-focused retrieval
 frames = simple_rag(
@@ -65,7 +65,7 @@ print(f"Time-focused frames: {len(result.time_focus_frames)}")
 Subtitle queries trigger enhanced subtitle search:
 
 ```python
-from videostir import simple_rag
+from videostir.inference import simple_rag
 
 # Queries mentioning subtitles will enable subtitle search
 frames = simple_rag(
@@ -103,7 +103,7 @@ Process multiple videos from a JSON configuration:
 ### Run Batch Processing
 
 ```python
-from videostir import run_batch_from_config
+from videostir.inference import run_batch_from_config
 
 results = run_batch_from_config(
     config_path="batch_config.json",
@@ -137,7 +137,7 @@ with open("batch_results/batch_results.json") as f:
 
 ```python
 import json
-from videostir import run_pipeline, PipelineConfig
+from videostir.inference import run_pipeline, PipelineConfig
 
 config = PipelineConfig("video.mp4", "query", "output/")
 result = run_pipeline(config)
@@ -165,7 +165,7 @@ for frame in frames[:5]:
 ### Get Top-K Frames
 
 ```python
-from videostir import simple_rag
+from videostir.inference import simple_rag
 
 frames = simple_rag("video.mp4", "query", top_frames=10)
 
@@ -181,7 +181,7 @@ high_confidence = [f for f in frames if f['score'] >= 4.0]
 Access video information from the result:
 
 ```python
-from videostir import run_pipeline, PipelineConfig
+from videostir.inference import run_pipeline, PipelineConfig
 
 config = PipelineConfig("video.mp4", "query", "output/")
 result = run_pipeline(config)
@@ -204,7 +204,7 @@ print(f"Reason: {intent['reason']}")
 Automatically handled for videos under 240 seconds. For shorter videos:
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 
 # Force short video mode threshold
 config = PipelineConfig(
@@ -223,7 +223,7 @@ result = run_pipeline(config)
 VideoStir supports checkpointing to enable resumable pipeline execution:
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 
 # Checkpointing is enabled by default
 config = PipelineConfig(
@@ -236,7 +236,7 @@ config = PipelineConfig(
 result = run_pipeline(config)
 
 # Later, to resume:
-from inference.checkpoint import CheckpointManager
+from videostir.inference.checkpoint import CheckpointManager
 checkpoint_manager = CheckpointManager("results")
 
 # Check available checkpoints
@@ -253,13 +253,13 @@ The CLI provides an alternative to Python scripting:
 
 ```bash
 # Basic usage
-python -m inference \
+python -m videostir.inference \
     --video my_video.mp4 \
     --query "Show me the car" \
     --output results/
 
 # With options
-python -m inference \
+python -m videostir.inference \
     --video video.mp4 \
     --query "What happens?" \
     --output results/ \
@@ -267,9 +267,9 @@ python -m inference \
     --frame-interval 20
 
 # Batch mode
-python -m inference \
+python -m videostir.inference \
     --batch-config samples.json \
     --output results/
 ```
 
-See `python -m inference --help` for all options.
+See `python -m videostir.inference --help` for all options.

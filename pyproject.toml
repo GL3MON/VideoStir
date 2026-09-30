@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "videostir"
+version = "0.1.0"
+description = "Understanding Long Videos via Spatio-Temporally Structured and Intent-Aware RAG"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "VideoStir Team" }]
+keywords = ["video", "retrieval", "RAG", "multimodal", "long-video-understanding"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Intended Audience :: Science/Research",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "torch>=2.0",
+    "opencv-python>=4.8",
+    "numpy>=1.24",
+    "networkx>=3.0",
+    "scikit-learn>=1.3",
+    "ruptures>=1.1",
+    "decord>=0.6",
+    "qwen-vl-utils[decord]>=0.0.8",
+    "transformers>=4.51",
+    "accelerate>=1.0",
+    "peft>=0.10",
+    "sentence-transformers>=3.0",
+    "huggingface-hub>=0.24",
+    "tqdm>=4.66",
+    "Pillow>=10.0",
+]
+
+[project.optional-dependencies]
+inference = [
+    "bitsandbytes>=0.43",
+    "datasets>=2.19",
+]
+train = [
+    "trl>=0.11",
+    "deepspeed>=0.15",
+    "datasets>=2.19",
+    "gdown>=5.0",
+    "jsonlines>=4.0",
+    "transformers-stream-generator>=0.0.5",
+    "openai>=1.0",
+]
+eval = [
+    "matplotlib>=3.7",
+    "pandas>=2.0",
+    "yt-dlp>=2024.0",
+]
+gdrive = [
+    "google-api-python-client>=2.0",
+    "google-auth>=2.0",
+    "google-auth-oauthlib>=1.0",
+]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.4",
+    "black>=24.0",
+]
+
+[project.scripts]
+videostir = "videostir.inference.__main__:main"
+medvidqa-eval = "videostir.eval.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/VideoStir/VideoStir"
+Repository = "https://github.com/VideoStir/VideoStir"
+Paper = "https://arxiv.org/abs/2604.05418"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"videostir.inference" = ["core/vision_encoder/bpe_simple_vocab_16e6.txt.gz"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]
+ignore = ["E501"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]

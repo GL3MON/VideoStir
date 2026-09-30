@@ -9,7 +9,7 @@ This guide covers advanced VideoStir features and customization options.
 You can control which stages are checkpointed individually:
 
 ```python
-from videostir import PipelineConfig
+from videostir.inference import PipelineConfig
 
 config = PipelineConfig(
     video_path="video.mp4",
@@ -32,7 +32,7 @@ config = PipelineConfig(
 ### Custom Checkpoint Directories
 
 ```python
-from videostir import PipelineConfig
+from videostir.inference import PipelineConfig
 
 config = PipelineConfig(
     video_path="video.mp4",
@@ -46,7 +46,7 @@ config = PipelineConfig(
 ### Working with CheckpointManager
 
 ```python
-from inference.checkpoint import CheckpointManager
+from videostir.inference.checkpoint import CheckpointManager
 
 # Initialize
 checkpoint_manager = CheckpointManager(
@@ -82,7 +82,7 @@ for cp in checkpoints:
 ### Complete PipelineConfig Reference
 
 ```python
-from videostir import PipelineConfig
+from videostir.inference import PipelineConfig
 
 config = PipelineConfig(
     # Required
@@ -132,7 +132,7 @@ config = PipelineConfig(
 ### Adjusting Top-K Retrieval
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 
 # Retrieve more segments for better coverage
 config = PipelineConfig(
@@ -149,7 +149,7 @@ result = run_pipeline(config)
 ### Controlling Subtitle Search
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 
 # Control subtitle expansion
 config = PipelineConfig(
@@ -166,7 +166,7 @@ result = run_pipeline(config)
 ### Time-Focused Search Control
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 
 # Adjust time-focused search parameters
 config = PipelineConfig(
@@ -186,7 +186,7 @@ result = run_pipeline(config)
 ### Analyze Query Intent Separately
 
 ```python
-from videostir import IntentAnalyzer
+from videostir.inference import IntentAnalyzer
 
 analyzer = IntentAnalyzer()
 
@@ -214,7 +214,7 @@ analyzer.unload()
 ### Batch Intent Analysis
 
 ```python
-from videostir import IntentAnalyzer
+from videostir.inference import IntentAnalyzer
 
 queries = [
     "What happens at the start?",
@@ -237,7 +237,7 @@ analyzer.unload()  # Cleanup when done
 ### Adjusting Reranking Parameters
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 
 # Custom reranking settings
 config = PipelineConfig(
@@ -255,7 +255,7 @@ result = run_pipeline(config)
 ### Using FrameReranker Directly
 
 ```python
-from videostir import FrameReranker
+from videostir.inference import FrameReranker
 import json
 
 # Load precomputed segments
@@ -284,7 +284,7 @@ reranker.unload()
 ### Custom Segmentation
 
 ```python
-from videostir import VideoSegmenter
+from videostir.inference.preprocessing import VideoSegmenter
 
 segmenter = VideoSegmenter(
     frame_interval=30,    # Extract features every 30 frames
@@ -307,11 +307,8 @@ for seg in segments:
 ### Building and Querying Graph
 
 ```python
-from videostir import (
-    SpatiotemporalGraphBuilder,
-    VideoEmbedder,
-    VideoRetriever
-)
+from videostir.inference.models import VideoEmbedder
+from videostir.inference.retrieval import SpatiotemporalGraphBuilder, VideoRetriever
 
 # Compute features
 embedder = VideoEmbedder()
@@ -337,7 +334,7 @@ for result in results:
 
 ```bash
 # Run with custom parameters
-python -m inference \
+python -m videostir.inference \
     --video video.mp4 \
     --query "What happens?" \
     --output results/ \
@@ -347,7 +344,7 @@ python -m inference \
     --top-frames 64
 
 # Batch with custom parameters
-python -m inference \
+python -m videostir.inference \
     --batch-config samples.json \
     --output results/ \
     --top-frames 32 \
@@ -359,7 +356,7 @@ python -m inference \
 ### Graceful Error Handling
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 import traceback
 
 try:
@@ -377,7 +374,7 @@ except Exception as e:
 ### Skipping Failed Videos in Batch
 
 ```python
-from videostir import run_batch_from_config
+from videostir.inference import run_batch_from_config
 
 results = run_batch_from_config(
     config_path="batch.json",
@@ -396,7 +393,7 @@ for video_id, result in results.items():
 ### Faster Processing for Large Videos
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 
 # Optimize for speed (less accurate but faster)
 config = PipelineConfig(
@@ -415,7 +412,7 @@ config = PipelineConfig(
 ### Memory-Efficient Processing
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 
 # Optimize for memory (slower but less VRAM)
 config = PipelineConfig(
@@ -432,7 +429,7 @@ config = PipelineConfig(
 ### Integrating with LLaVA
 
 ```python
-from videostir import simple_rag
+from videostir.inference import simple_rag
 from llava.model.builder import load_pretrained_model
 from llava.mm_utils import process_images
 
@@ -453,10 +450,9 @@ prompt = "Analyze these frames and answer the question."
 ### Custom Video Processing Pipeline
 
 ```python
-from videostir import (
-    VideoSegmenter, VideoEmbedder,
-    SpatiotemporalGraphBuilder, VideoRetriever
-)
+from videostir.inference.preprocessing import VideoSegmenter
+from videostir.inference.models import VideoEmbedder
+from videostir.inference.retrieval import SpatiotemporalGraphBuilder, VideoRetriever
 import cv2
 
 # Custom frame extraction

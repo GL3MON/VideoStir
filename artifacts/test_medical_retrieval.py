@@ -21,25 +21,24 @@ Checkpoint Stages:
 
 import os
 import sys
-import torch
 
-# Add VideoStir directory to path
-videostir_dir = "/hfcache/harissh/VideoStir"
-sys.path.insert(0, videostir_dir)
+# Ensure the repository root is importable so `inference` resolves
+repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if repo_root not in sys.path:
+    sys.path.insert(0, repo_root)
 
 # Set environment to avoid GUI issues
 os.environ["OPENCV_LOG_LEVEL"] = "ERROR"
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
-from inference.preprocessing import VideoSegmenter
-from inference.models import VideoEmbedder, IntentAnalyzer, FrameReranker
-from inference.retrieval import SpatiotemporalGraphBuilder, VideoRetriever
-from inference.checkpoint import CheckpointManager
-from inference.config import PipelineConfig
+from videostir.inference.preprocessing import VideoSegmenter
+from videostir.inference.models import VideoEmbedder, IntentAnalyzer, FrameReranker
+from videostir.inference.retrieval import SpatiotemporalGraphBuilder, VideoRetriever
+from videostir.inference.checkpoint import CheckpointManager
 
-video_path = "/hfcache/harissh/VideoStir/artifacts/test_medical_video.mp4"
+video_path = os.path.join(repo_root, "artifacts", "test_medical_video.mp4")
 query = "Show me the medical procedure steps"
-output_dir = "/hfcache/harissh/VideoStir/artifacts/output"
+output_dir = os.path.join(repo_root, "artifacts", "output")
 
 # Enable checkpointing
 enable_checkpoint = True

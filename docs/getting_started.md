@@ -11,7 +11,7 @@ VideoStir supports checkpointing to enable resumable pipeline execution. This is
 By default, checkpointing is **enabled**. The pipeline will save intermediate results to the `checkpoints/` and `cache/` subdirectories in your output directory.
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 
 config = PipelineConfig(
     video_path="my_video.mp4",
@@ -38,13 +38,13 @@ config = PipelineConfig(
 
 ```bash
 # Enable checkpointing (default)
-python -m inference run --video video.mp4 --query "query"
+python -m videostir.inference run --video video.mp4 --query "query"
 
 # Disable checkpointing
-python -m inference run --video video.mp4 --query "query" --disable-checkpoint
+python -m videostir.inference run --video video.mp4 --query "query" --disable-checkpoint
 
 # Custom checkpoint directory
-python -m inference run --video video.mp4 --query "query" \
+python -m videostir.inference run --video video.mp4 --query "query" \
     --checkpoint-dir my_checkpoints \
     --cache-dir my_cache
 ```
@@ -64,7 +64,7 @@ python test_medical_retrieval.py resume
 Or programmatically:
 
 ```python
-from inference.checkpoint import CheckpointManager
+from videostir.inference.checkpoint import CheckpointManager
 
 checkpoint_manager = CheckpointManager("results")
 
@@ -95,7 +95,7 @@ if checkpoint_manager.has_checkpoint("segment_features"):
 To clear all checkpoints and start fresh:
 
 ```python
-from inference.checkpoint import CheckpointManager
+from videostir.inference.checkpoint import CheckpointManager
 
 checkpoint_manager = CheckpointManager("results")
 checkpoint_manager.clear_all()  # Deletes all checkpoints
@@ -114,10 +114,8 @@ checkpoint_manager.clear_all()  # Deletes all checkpoints
 ### Install Dependencies
 
 ```bash
-cd VideoStir/inference
-
-# Install inference dependencies
-pip install -r requirements_inference.txt
+# From the repository root
+pip install -e .
 ```
 
 Required packages include:
@@ -146,7 +144,7 @@ Required packages include:
 ### Simple Video Retrieval
 
 ```python
-from videostir import simple_rag
+from videostir.inference import simple_rag
 
 # Run retrieval on a video
 frames = simple_rag(
@@ -164,7 +162,7 @@ for frame in frames[:5]:
 For more control over the retrieval process:
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 
 # Configure the pipeline
 config = PipelineConfig(

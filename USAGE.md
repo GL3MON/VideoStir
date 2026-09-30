@@ -4,13 +4,13 @@
 
 ```bash
 # Basic retrieval
-python -m inference run --video /path/to/video.mp4 --query "What happens in the opening?"
+python -m videostir.inference run --video /path/to/video.mp4 --query "What happens in the opening?"
 
 # With subtitle JSON file
-python -m inference run --video /path/to/video.mp4 --query "What is the date of birth?" --subtitle-json /path/to/subtitles.json
+python -m videostir.inference run --video /path/to/video.mp4 --query "What is the date of birth?" --subtitle-json /path/to/subtitles.json
 
 # Interactive answer mode (Qwen2.5-VL-3B)
-python -m inference answer --video /path/to/video.mp4 --output ./output --subtitle-json /path/to/subtitles.json
+python -m videostir.inference answer --video /path/to/video.mp4 --output ./output --subtitle-json /path/to/subtitles.json
 ```
 
 ## Commands
@@ -18,7 +18,7 @@ python -m inference answer --video /path/to/video.mp4 --output ./output --subtit
 ### 1. Single Video Retrieval (`run`)
 
 ```bash
-python -m inference run [OPTIONS] --video <video_path> --query <query>
+python -m videostir.inference run [OPTIONS] --video <video_path> --query <query>
 ```
 
 **Required:**
@@ -61,7 +61,7 @@ python -m inference run [OPTIONS] --video <video_path> --query <query>
 
 **Example:**
 ```bash
-python -m inference run \
+python -m videostir.inference run \
   --video ./videos/demo.mp4 \
   --query "When does the character speak about their birthday?" \
   --subtitle-json ./subtitles/demo_en.json \
@@ -73,7 +73,7 @@ python -m inference run \
 Launches an interactive shell where you can query the video:
 
 ```bash
-python -m inference answer [OPTIONS] --video <video_path>
+python -m videostir.inference answer [OPTIONS] --video <video_path>
 ```
 
 **Required:**
@@ -91,7 +91,7 @@ python -m inference answer [OPTIONS] --video <video_path>
 
 **Example:**
 ```bash
-python -m inference answer \
+python -m videostir.inference answer \
   --video ./videos/demo.mp4 \
   --subtitle-json ./subtitles/demo_en.json
 
@@ -106,7 +106,7 @@ python -m inference answer \
 Process multiple videos from a configuration file:
 
 ```bash
-python -m inference batch --input <config.json> --output <output_dir>
+python -m videostir.inference batch --input <config.json> --output <output_dir>
 ```
 
 **Required:**
@@ -142,7 +142,7 @@ python -m inference batch --input <config.json> --output <output_dir>
 
 **Example:**
 ```bash
-python -m inference batch \
+python -m videostir.inference batch \
   --input ./configs/batch_jobs.json \
   --output ./results/batch_output \
   --video-root ./videos \

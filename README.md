@@ -1,6 +1,6 @@
 # [ACL 2026] VideoStir: Understanding Long Videos via Spatio-Temporally Structured and Intent-Aware RAG
 
-![Framework](/Figure/framework.png)
+![Framework](Figure/framework.png)
 
 **Paper**: [ArXiv Link](https://arxiv.org/pdf/2604.05418)
 
@@ -14,14 +14,104 @@ VideoStir is a structured and intent-aware long-video RAG framework that:
 ### Installation
 
 ```bash
-cd VideoStir/inference
-pip install -r requirements_inference.txt
+pip install -e .
 ```
+
+For GPU environments such as Kaggle, attach your videos as a Kaggle Dataset,
+then install this repository in a notebook:
+
+```python
+!git clone https://github.com/VideoStir/VideoStir.git
+%cd /kaggle/working/VideoStir
+!pip install -e .
+```
+
+Use the mounted dataset path for the input video and write results under
+`/kaggle/working`, which is available for notebook output and download:
+
+```python
+from videostir import simple_rag
+
+frames = simple_rag(
+    "/kaggle/input/<your-dataset>/video.mp4",
+    "What happens during the procedure?",
+    output_dir="/kaggle/working/videostir-results",
+    top_frames=32,
+)
+```
+
+The first run downloads the base models from Hugging Face. The reranker also
+uses the LoRA adapter described under [Download Checkpoints](#download-checkpoints);
+place it in `/kaggle/working/VideoStir/result` or update the adapter path in your
+pipeline configuration. Enable Kaggle internet access for model downloads, or
+cache the weights in a Kaggle Dataset.
+
+### Upload Generated Videos to Google Drive
+
+Install the Drive uploader dependencies with `pip install -e ".[gdrive]"` and
+enable the Google Drive API in a Google Cloud project. For a personal Drive,
+create an OAuth client of type **Desktop app**, download its client JSON, and
+save that downloaded file as `.secrets/gauth.json`. Then authorize your Google
+account once:
+
+```bash
+python scripts/upload_videos_to_gdrive.py --auth-only --oauth-port 8765
+```
+
+The script recognizes the OAuth client JSON, opens a Google sign-in page, and
+saves the resulting user token separately as `.secrets/gauth-token.json`. It
+uses that token on later local runs. In Kaggle, add the contents of
+`.secrets/gauth-token.json` as a Kaggle Secret named
+`GDRIVE_OAUTH_TOKEN_JSON`; add the destination folder ID as `GDRIVE_FOLDER_ID`.
+Load both secrets without printing them:
+
+When the script runs on a remote cloud server, forward port `8765` from your
+laptop to the server before approving access. In VS Code Remote, use the
+**Ports** panel and forward port `8765`. With SSH, run this on your laptop in a
+second terminal, replacing the host with your SSH target:
+
+```bash
+ssh -N -L 8765:localhost:8765 your-cloud-host
+```
+
+Keep the forward active while completing Google sign-in; the browser’s
+`localhost:8765` callback will then reach the cloud process.
+
+For local runs, `.secrets/gauth.json` is the default OAuth client file and
+`.secrets/gauth-token.json` is the token file. Override the credential file with
+`--credentials /path/to/credentials.json` or
+`GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json` if needed.
+
+```python
+import os
+from kaggle_secrets import UserSecretsClient
+
+secrets = UserSecretsClient()
+os.environ["GDRIVE_OAUTH_TOKEN_JSON"] = secrets.get_secret("GDRIVE_OAUTH_TOKEN_JSON")
+os.environ["GDRIVE_FOLDER_ID"] = secrets.get_secret("GDRIVE_FOLDER_ID")
+```
+
+Then upload from the notebook:
+
+```python
+!python scripts/upload_videos_to_gdrive.py /kaggle/working/videostir-results --dry-run
+!python scripts/upload_videos_to_gdrive.py /kaggle/working/videostir-results
+```
+
+To find the folder ID, open that folder in Drive and copy the string after
+`/folders/` in its URL. You can also upload locally by setting
+`GOOGLE_APPLICATION_CREDENTIALS` to a service-account key file. Service accounts
+have no personal storage quota, so use one with a Workspace Shared Drive where
+it has write access. Keep OAuth tokens and service-account keys out of Git.
+
+The uploader scans recursively, keeps the folder structure, and replaces a
+same-name file in its destination folder when you rerun it. Remove `--dry-run`
+only after confirming the listed source videos are the ones you want to upload.
 
 ### Basic Usage
 
 ```python
-from videostir import simple_rag
+from videostir.inference import simple_rag
 
 # Run retrieval on a video
 frames = simple_rag(
@@ -38,7 +128,7 @@ for frame in frames[:5]:
 ### Advanced Usage
 
 ```python
-from videostir import PipelineConfig, run_pipeline
+from videostir.inference import PipelineConfig, run_pipeline
 
 # Configure with custom parameters
 config = PipelineConfig(
@@ -64,8 +154,7 @@ print(f"Found {len(result.reranked_frames)} relevant frames")
 ### Install Dependencies
 
 ```bash
-cd VideoStir/inference
-pip install -r requirements_inference.txt
+pip install -e .
 ```
 
 ### Download Checkpoints
@@ -79,7 +168,7 @@ pip install -r requirements_inference.txt
 ### Single Video
 
 ```python
-from videostir import simple_rag
+from videostir.inference import simple_rag
 
 # Simple one-line usage
 frames = simple_rag("video.mp4", "Show me the car scene")
@@ -115,7 +204,7 @@ Create a JSON configuration file:
 Run batch processing:
 
 ```python
-from videostir import run_batch_from_config
+from videostir.inference import run_batch_from_config
 
 results = run_batch_from_config(
     config_path="batch_config.json",
@@ -127,13 +216,13 @@ results = run_batch_from_config(
 
 ```bash
 # Single video
-python -m inference \
+python -m videostir.inference run \
     --video video.mp4 \
     --query "What happens?" \
     --output results/
 
 # With options
-python -m inference \
+python -m videostir.inference run \
     --video video.mp4 \
     --query "What happens?" \
     --output results/ \
@@ -141,8 +230,8 @@ python -m inference \
     --frame-interval 20
 
 # Batch mode
-python -m inference \
-    --batch-config samples.json \
+python -m videostir.inference batch \
+    --input samples.json \
     --output results/
 ```
 
